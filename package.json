@@ -1,0 +1,19 @@
+{
+  "name": "jpx-importer",
+  "displayName": "JPX Importer",
+  "description": "TODO",
+  "version": "0.1",
+  "author": { 
+    "name": "Bartek Bartłomiej",
+    "email": "TODO"
+  },
+  "contributors": [],
+  "publisher": "bartek-bartlomiej",
+  "license": "MIT",
+  "categories": [ "Scripts" ],
+  "contributes": {
+    "scripts": [
+      { "path": "./main.lua" }
+    ]
+  }
+}
