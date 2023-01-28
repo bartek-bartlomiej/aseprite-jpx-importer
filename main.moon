@@ -1,6 +1,15 @@
 export init, exit
 
+ID = {
+  filename: "filename"
+  method: "method"
+  cancel: "cancel"
+}
+
+METHODS = { "decoder", "temporary file" }
+
 local *
+
 
 init = (plugin) ->
   plugin\newCommand({
@@ -11,6 +20,7 @@ init = (plugin) ->
   })
 
   return
+
 
 do_import = () ->
   arguments = request_arguments!
@@ -24,26 +34,25 @@ do_import = () ->
 request_arguments = () ->
   dialog = with create_import_dialog!
     \show!
-
   arguments = dialog.data
-  arguments unless arguments.cancel
+  
+  arguments unless arguments[ID.cancel]
 
 
 create_import_dialog = () ->
   with(Dialog("Import JPixel project"))
     on_confirm = () ->
-      if .data.filename == ""
+      if .data[ID.filename] == ""
         app.alert({ title: "Error", text: "No file selected." })
       else
         \close!
       return
 
-    --TODO: extract constants and reuse them in script 
-    \file({ id: "filename", label: "JPixel project:", open: true, filetypes: { "jpx" } })
-    \combobox({ id: "method", label: "PNG decoding method:", option: "decoder", options: { "decoder", "temporary file" } })
+    \file({ id: ID.filename, label: "JPixel project:", open: true, filetypes: { "jpx" } })
+    \combobox({ id: ID.method, label: "PNG decoding method:", option: METHODS[1], options: METHODS })
     \button({ text: "Convert", onclick: on_confirm })
-    \button({ id: "cancel", text: "Cancel" })
+    \button({ id: ID.cancel, text: "Cancel" })
 
 
-export exit = (plugin) ->
+exit = (plugin) ->
   return
