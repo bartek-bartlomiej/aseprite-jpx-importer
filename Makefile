@@ -1,17 +1,32 @@
 SHELL=/bin/bash
 
+SOURCE_DIR := source
+BUILD_DIR := build
+
+SOURCE_PATH := ./$(SOURCE_DIR)
+BUILD_PATH := ./$(BUILD_DIR)
+
+SOURCES := $(shell find $(SOURCE_PATH) -name '*.moon')
+LICENCES := $(shell find $(SOURCE_PATH) -name 'LICENCE')
+
+TO_TRANSPILE := $(SOURCES:%.moon=%.lua)
+
+
 .PHONY: all clean
 
-all: build build/jpx-importer.aseprite-extension
+all: $(BUILD_PATH) $(BUILD_PATH)/jpx-importer.aseprite-extension
 
-transpiled/main.lua: main.moon
+$(SOURCE_PATH)/%.lua: $(SOURCE_PATH)/%.moon
 	moonc -o $@ $<
 
-build:
+$(BUILD_PATH):
 	mkdir $@
 
-build/jpx-importer.aseprite-extension: package.json transpiled/main.lua
-	zip $@ -j $^
+$(BUILD_PATH)/jpx-importer.aseprite-extension: $(SOURCE_PATH)/package.json $(TO_TRANSPILE) $(LICENCES)
+	pushd $(SOURCE_PATH) ; \
+	zip -r ../$@ $(^:$(SOURCE_DIR)/%=%) ; \
+	popd
 
 clean:
-	rm -rf transpiled build
+	rm -rf $(BUILD_PATH)
+	rm $(TO_TRANSPILE)

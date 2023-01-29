@@ -1,4 +1,4 @@
-json_decode = dofile("json-decode.lua")
+json_decode = dofile("json/decode.lua")
 
 export init, exit
 

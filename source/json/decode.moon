@@ -1,3 +1,10 @@
+-- 
+-- decode() function from json.lua library, improved and rewritten in MoonScript
+-- 
+-- Copyright (c) 2023 Bartłomiej Stępień (MoonScript modifications)
+-- Copyright (c) 2020 rxi (original version)
+--
+
 local *
 
 SPACE = string.byte(" ")
@@ -288,15 +295,16 @@ convert_codepoint_to_utf8 = (n) ->
 
 
 token_parsers = with {}
+  do
     [CURLY_OPEN_BRACKET] = parse_object
-    
+  do
     [SQUARE_OPEN_BRACKET] = parse_array
-    
+  do
     [string.byte(key, 1)] = parse_literal for key, _ in pairs(json_literals)
-    
+  do
     [key] = parse_number for key = ZERO, NINE
     [MINUS] = parse_number
-
+  do
     [DOUBLE_QUOTE] = parse_string
     
 
