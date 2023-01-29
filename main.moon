@@ -1,3 +1,5 @@
+json_decode = dofile("json-decode.lua")
+
 export init, exit
 
 METHODS = { "decoder", "temporary file" }
@@ -16,9 +18,12 @@ init = (plugin) ->
   return
 
 
-do_import = () ->
+do_import = () ->  
   arguments = request_arguments!
   return unless arguments
+
+  data = get_project_data(arguments.filename)
+  return unless data
 
   print("continue")
   
@@ -48,6 +53,38 @@ request_arguments = () ->
   
   data = dialog.data
   { filename: data[ID.filename], method: data[ID.method] } if confirmed
+
+
+get_project_data = (filename) ->
+  content = try_read_file_content(filename)
+  return unless content
+
+  try_parse_JSON(content)
+
+
+try_read_file_content = (filename) -> try("reading file", read_file_content, filename)
+
+
+read_file_content = (filename) ->
+  local content
+  with(io.open(filename, "r"))
+    content = \read("a")
+    \close!
+  
+  content
+
+
+try_parse_JSON = (content) -> try("parsing file", json_decode, content)
+
+
+try = (description, f, ...) ->
+  status, result = pcall(f, ...)
+
+  if status
+    result
+  else
+    app.alert("During #{description}, error occured: #{result}")
+    nil
 
 
 exit = (plugin) ->
