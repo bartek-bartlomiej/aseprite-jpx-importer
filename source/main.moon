@@ -1,8 +1,15 @@
 json_decode = dofile("json/decode.lua")
+from_base64 = dofile("basexx/from-base64.lua")
 
 export init, exit
 
-METHODS = { "decoder", "temporary file" }
+DECODE_METHOD = "decoder"
+TEMPORARY_FILE_METHOD = "temporary file"
+
+METHODS = { 
+  -- TODO: DECODE_METHOD, 
+  TEMPORARY_FILE_METHOD 
+}
 
 local *
 
@@ -89,11 +96,36 @@ create_project_sprite = (filename, properties) ->
 
 set_up_project_sprite = (sprite, properties, method) ->
   app.transaction(() ->
+    create_image = creating_image_methods[method]
+
     create_frames(sprite, properties)
     create_layers(sprite, properties)
-    --TODO: create_cels(sprite, properties, method)
+    create_cels(sprite, properties, create_image)
     --TODO: create_palette
   )
+
+
+creating_image_methods =
+  [DECODE_METHOD]: (encoded_data) ->
+    png_file = PngFile(decode_data(encoded_data))
+    
+    with Image(png_file.width, png_file.height)
+      .bytes = convert_bytes_to_string(png_file\decode!)
+
+  [TEMPORARY_FILE_METHOD]: (encoded_data) ->
+    filename = app.fs.joinPath(app.fs.tempPath, 'aseprite-convert-jpx.png')
+    with io.open(filename, "w")
+      \write(decode_data(encoded_data))
+      \flush!
+      \close!
+
+    Image({ fromFile: filename })
+
+
+DATA_HEADER_LENGTH = string.len("data:image/png;base64,")
+
+decode_data = (encoded_data) ->
+  from_base64(string.sub(encoded_data, DATA_HEADER_LENGTH + 1))
 
 
 create_frames = (sprite, properties) ->
@@ -127,6 +159,48 @@ count_layers = (properties) ->
     count = math.max(count, #(frame_properties.layers))
 
   count
+
+
+create_cels = (sprite, properties, create_image) ->
+  for i = 1, #(properties.frames)
+    frame = sprite.frames[i]
+    frame_properties = properties.frames[i]
+    frame_layers_count = #(frame_properties.layers)
+
+    -- in JPixel files, order of layers is reversed
+    for j = frame_layers_count, 1, -1
+      layer = sprite.layers[frame_layers_count - j + 1]
+      layer_properties = frame_properties.layers[j]
+
+      colors_image = create_image(layer_properties.color)
+      alpha_image = create_image(layer_properties.alpha)
+
+      with sprite\newCel(layer, frame)
+        for pixel in .image\pixels!
+          { :x, :y } = pixel
+          pixel(get_color(x, y, colors_image, alpha_image))
+
+      app.refresh!
+
+  
+get_color = do
+  color = app.pixelColor
+  r = color.rgbaR
+  g = color.rgbaG
+  b = color.rgbaB
+  a = color.rgbaR
+  create = color.rgba
+
+  (x, y, colors, alpha) ->
+    colors_value = colors\getPixel(x, y)
+    alpha_value = alpha\getPixel(x, y)
+
+    create(
+      r(colors_value),
+      g(colors_value),
+      b(colors_value),
+      a(alpha_value)
+    )
 
 
 try = (description, f, ...) ->
