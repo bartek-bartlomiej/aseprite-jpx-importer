@@ -1,5 +1,6 @@
 json_decode = dofile("json/decode.lua")
 from_base64 = dofile("basexx/from-base64.lua")
+decode_png = dofile("pngLua/decode-png.lua")
 
 export init, exit
 
@@ -7,7 +8,7 @@ DECODE_METHOD = "decoder"
 TEMPORARY_FILE_METHOD = "temporary file"
 
 METHODS = { 
-  -- TODO: DECODE_METHOD, 
+  DECODE_METHOD, 
   TEMPORARY_FILE_METHOD 
 }
 
@@ -107,10 +108,11 @@ set_up_project_sprite = (sprite, properties, method) ->
 
 creating_image_methods =
   [DECODE_METHOD]: (encoded_data) ->
-    png_file = PngFile(decode_data(encoded_data))
-    
-    with Image(png_file.width, png_file.height)
-      .bytes = convert_bytes_to_string(png_file\decode!)
+    png_image = decode_png(decode_data(encoded_data))
+
+    Image(png_image.width, png_image.height)
+    -- with Image(png_image.width, png_image.height)
+    --  .bytes = string.char(table.unpack(bytes))
 
   [TEMPORARY_FILE_METHOD]: (encoded_data) ->
     filename = app.fs.joinPath(app.fs.tempPath, 'aseprite-convert-jpx.png')
