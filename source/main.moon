@@ -110,9 +110,9 @@ creating_image_methods =
   [DECODE_METHOD]: (encoded_data) ->
     png_image = decode_png(decode_data(encoded_data))
 
-    Image(png_image.width, png_image.height)
-    -- with Image(png_image.width, png_image.height)
-    --  .bytes = string.char(table.unpack(bytes))
+    with Image(png_image.width, png_image.height)
+      --print(table.concat(png_image.bytes, ","))
+      .bytes = string.char(table.unpack(png_image.bytes, 1, png_image.bytes.n))
 
   [TEMPORARY_FILE_METHOD]: (encoded_data) ->
     filename = app.fs.joinPath(app.fs.tempPath, 'aseprite-convert-jpx.png')
@@ -178,11 +178,11 @@ create_cels = (sprite, properties, create_image) ->
       alpha_image = create_image(layer_properties.alpha)
 
       with sprite\newCel(layer, frame)
-        for pixel in .image\pixels!
-          { :x, :y } = pixel
-          pixel(get_color(x, y, colors_image, alpha_image))
+       for pixel in .image\pixels!
+         { :x, :y } = pixel
+         pixel(get_color(x, y, colors_image, alpha_image))
 
-      app.refresh!
+      --app.refresh!
 
   
 get_color = do
