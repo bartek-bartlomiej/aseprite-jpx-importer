@@ -1,4 +1,4 @@
-deflate = dofile("deflate.lua")
+zlib_deflate = dofile("../zlib/deflate.lua")
 
 SIGNATURE = "\137\080\078\071\013\010\026\010"
 
@@ -14,7 +14,7 @@ decode_png = (input) ->
   
   -- debug, decompress should be bug-free
   expected_size = height * (1 + width * 4)
-  unless expected_size == buffer.n
+  unless expected_size == #buffer
     error("Incorrect size of decompressed data (#{expected_size}, got #{buffer.n})")
 
   {
@@ -131,26 +131,7 @@ read_byte_from_string = (input, index) ->
 
 
 decompress_data = (input, data_index, data_length) ->
-  -- TODO: simplify zlib.decompress
-  i = data_index - 1
-  j = data_index + data_length - 1
-  o = {}
-  o.read = () =>
-    i += 1
-    string.byte(input, i) if i <= j
-  
-  buffer =
-    n: 0
-  
-  deflate.inflate_zlib({
-    input: o
-    output: (byte) -> 
-      buffer.n += 1
-      buffer[buffer.n] = byte
-    disable_crc: true
-  })
-
-  buffer
+  zlib_deflate(input, data_index, data_length)
 
 
 BYTES_PER_PIXEL = 4

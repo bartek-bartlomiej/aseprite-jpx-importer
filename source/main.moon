@@ -1,6 +1,6 @@
 json_decode = dofile("json/decode.lua")
 from_base64 = dofile("basexx/from-base64.lua")
-decode_png = dofile("pngLua/decode-png.lua")
+decode_png = dofile("png/decode-png.lua")
 
 export init, exit
 
