@@ -1,9 +1,5 @@
--- 
--- from_base64() function from basexx library, improved and rewritten in MoonScript
--- 
 -- Copyright (c) 2023 Bartłomiej Stępień (MoonScript modifications)
 -- Copyright (c) 2013 aiq (original version)
---
 
 get_byte = string.byte
 
@@ -28,7 +24,7 @@ lookup = do
   { get_byte(base64_alphabet, i), to_bits(i - 1, base64_length) for i = 1, #base64_alphabet }
 
 
-from_base64 = (input) ->
+decode = (input) ->
   bits = decode_bits(input)
   bytes = convert_bits_to_bytes(bits)
 
@@ -66,4 +62,4 @@ convert_bits_to_bytes = (bits) ->
   bytes
 
 
-from_base64
+decode

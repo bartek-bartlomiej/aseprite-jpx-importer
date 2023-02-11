@@ -1,4 +1,7 @@
-Copyright (c) 2013 aiq
+# base64.decode
+
+Copyright (c) 2023 Bartłomiej Stępień (MoonScript modifications)
+Copyright (c) 2013 aiq (original version of from_base64 function from basexx library)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in

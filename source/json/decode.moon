@@ -1,18 +1,12 @@
--- 
--- decode() function from json.lua library, improved and rewritten in MoonScript
--- 
 -- Copyright (c) 2023 Bartłomiej Stępień (MoonScript modifications)
--- Copyright (c) 2020 rxi (original version)
---
+-- Copyright (c) 2020 rxi (original implementation of json.decode from json.lua library)
 
 local *
 
 SPACE = string.byte(" ")
-BACKSPACE = string.byte("\b")
 CARRIAGE_RETURN = string.byte("\r")
 NEW_LINE = string.byte("\n")
 TAB = string.byte("\t")
-FORMFEED = string.byte("\f")
 
 SLASH = string.byte("/")
 BACKSLASH = string.byte("\\")

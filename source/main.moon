@@ -1,6 +1,6 @@
-json_decode = dofile("json/decode.lua")
-from_base64 = dofile("basexx/from-base64.lua")
-decode_png = dofile("png/decode-png.lua")
+decode_json = dofile("json-decode.lua")
+decode_base64 = dofile("base64-decode.lua")
+decode_png = dofile("png-decode.lua")
 
 export init, exit
 
@@ -85,7 +85,7 @@ read_file_content = (filename) ->
   content
 
 
-try_parse_JSON = (content) -> try("parsing file", json_decode, content)
+try_parse_JSON = (content) -> try("parsing file", decode_json, content)
 
 
 create_project_sprite = (filename, properties) ->
@@ -127,7 +127,7 @@ creating_image_methods =
 DATA_HEADER_LENGTH = string.len("data:image/png;base64,")
 
 decode_data = (encoded_data) ->
-  from_base64(string.sub(encoded_data, DATA_HEADER_LENGTH + 1))
+  decode_base64(string.sub(encoded_data, DATA_HEADER_LENGTH + 1))
 
 
 create_frames = (sprite, properties) ->
