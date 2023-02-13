@@ -31,7 +31,7 @@ During import process, script will ask for read access.
 # Limitations
 An Aseprite project is represented by matrix of layers and frames with cels as matrix cells, where in a JPixel project each frame can be treated as an individual stack of layers (images) with own naming and visibility setting.
 
-To avoid confclits, two methods of import are provided:
+To avoid conflicts, two methods of import are provided:
 - import successive frames as stack of cels:
   - pros: simple matrix of cells,
   - cons: information about names and visibility is lost;
