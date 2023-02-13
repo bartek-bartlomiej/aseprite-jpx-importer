@@ -111,7 +111,6 @@ creating_image_methods =
     png_image = decode_png(decode_data(encoded_data))
 
     with Image(png_image.width, png_image.height)
-      --print(table.concat(png_image.bytes, ","))
       .bytes = string.char(table.unpack(png_image.bytes, 1, png_image.bytes.n))
 
   [TEMPORARY_FILE_METHOD]: (encoded_data) ->

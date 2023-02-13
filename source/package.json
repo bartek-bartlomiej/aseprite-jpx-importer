@@ -1,11 +1,11 @@
 {
   "name": "jpx-importer",
-  "displayName": "JPX Importer",
-  "description": "TODO",
+  "displayName": "JPixel Importer",
+  "description": "An Aseprite extension that allows to import JPixel projects as Aseprite projects",
   "version": "0.1",
   "author": { 
     "name": "Bartłomiej Stępień",
-    "email": "TODO"
+    "url": "https://github.com/bartek-bartlomiej/aseprite-jpx-importer"
   },
   "contributors": [],
   "publisher": "bartek-bartlomiej",
