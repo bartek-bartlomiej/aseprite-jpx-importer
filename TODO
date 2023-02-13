@@ -1,0 +1,8 @@
+- [ ] import palette
+- [ ] import tileset?
+- [ ] import background?
+- [ ] import names and visibility of layers in single-frame project
+- [ ] add alternative method of importing layers on same level with different name (grouping)
+- [ ] eliminate creating temporary strings during process
+- [ ] integrate project with GitHub releases
+- [ ] integrate project with itch.io site
